@@ -38,6 +38,8 @@ O sistema deve permitir o cadastro de usuários com:
 - E-mail;
 - Nome de usuário;
 - Senha;
+- Nome;
+- Sobrenome;
 - Data de nascimento;
 - Foto de perfil opcional.
 
@@ -66,7 +68,7 @@ O sistema deve permitir a renovação do token de acesso por meio de refresh tok
 
 O sistema deve permitir o encerramento da sessão ativa.
 
-O backend deve implementar uma estratégia de invalidação ou revogação de refresh tokens. A invalidação de access tokens já emitidos deverá seguir a estratégia de segurança escolhida pela equipe.
+O backend deve implementar uma estratégia de invalidação ou revogação de refresh tokens. A estratégia escolhida foi a revogação (blacklist) do refresh token; o access token não é invalidado ativamente, expirando naturalmente pelo tempo curto de vida configurado.
 
 ### RF01.06 — Recuperação de senha
 
@@ -737,6 +739,12 @@ As decisões abaixo são obrigatórias para a primeira versão do Twist e devem 
 | Catálogo | Utilizar API externa, com o TMDB como fonte principal e identificador externo armazenado localmente. |
 | Ranking semanal | Ranking de resenhas baseado nas curtidas recebidas durante o período semanal. |
 | Comentários em resenhas | Não haverá comentários ou respostas na primeira versão; haverá somente curtidas. |
+| Chave primária | Inteiro autoincremento (`BigAutoField`) em todas as entidades, em vez de UUID. |
+| Login | Autenticação com JWT (`djangorestframework-simplejwt`), aceitando e-mail ou nome de usuário. |
+| Logout | Revogação (blacklist) do refresh token via `rest_framework_simplejwt.token_blacklist`; access token expira naturalmente. |
+| Foto de perfil | Upload tratado pelo backend, que envia o arquivo para o Supabase Storage (bucket público `avatars`); aceita JPEG, PNG ou WebP, até 5MB. |
+| Nome e sobrenome | Passaram a ser campos obrigatórios no cadastro (RF01.01), além dos já previstos. |
+| Prefixo das rotas de autenticação | `/api/accounts/`, em vez de `/api/auth/`. |
 
 ---
 
@@ -765,12 +773,14 @@ Deverá utilizar o modelo de usuário personalizado do Django.
 
 Campos sugeridos:
 
-- `id`;
+- `id` (inteiro autoincremento);
 - `email`;
 - `username`;
 - `password`;
+- `first_name`;
+- `last_name`;
 - `birth_date`;
-- `avatar`;
+- `avatar_url`;
 - `bio`;
 - `created_at`;
 - `updated_at`.
@@ -849,12 +859,12 @@ Campos sugeridos:
 
 | Método | Endpoint | Descrição |
 |---|---|---|
-| POST | `/api/auth/register/` | Cadastro |
-| POST | `/api/auth/login/` | Login |
-| POST | `/api/auth/token/refresh/` | Renovação do token |
-| POST | `/api/auth/logout/` | Logout |
-| POST | `/api/auth/password-reset/` | Solicitar recuperação |
-| POST | `/api/auth/password-reset/confirm/` | Confirmar recuperação |
+| POST | `/api/accounts/register/` | Cadastro |
+| POST | `/api/accounts/login/` | Login |
+| POST | `/api/accounts/token/refresh/` | Renovação do token |
+| POST | `/api/accounts/logout/` | Logout |
+| POST | `/api/accounts/password-reset/` | Solicitar recuperação |
+| POST | `/api/accounts/password-reset/confirm/` | Confirmar recuperação |
 
 ## Usuários
 
