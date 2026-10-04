@@ -857,25 +857,25 @@ Campos sugeridos:
 
 ## Autenticação
 
-| Método | Endpoint | Descrição |
-|---|---|---|
-| POST | `/api/accounts/register/` | Cadastro |
-| POST | `/api/accounts/login/` | Login |
-| POST | `/api/accounts/token/refresh/` | Renovação do token |
-| POST | `/api/accounts/logout/` | Logout |
-| POST | `/api/accounts/password-reset/` | Solicitar recuperação |
-| POST | `/api/accounts/password-reset/confirm/` | Confirmar recuperação |
+| Método | Endpoint | Descrição |  OK |
+|---|---|---|---|
+| POST | `/api/accounts/register/` | Cadastro | ✅ |
+| POST | `/api/accounts/login/` | Login | ✅ |
+| POST | `/api/accounts/token/refresh/` | Renovação do token | ✅ |
+| POST | `/api/accounts/logout/` | Logout | ✅ |
+| POST | `/api/accounts/password-reset/` | Solicitar recuperação |  |
+| POST | `/api/accounts/password-reset/confirm/` | Confirmar recuperação |  |
 
 ## Usuários
 
-| Método | Endpoint | Descrição |
-|---|---|---|
-| GET | `/api/users/me/` | Usuário autenticado |
-| PATCH | `/api/users/me/` | Editar perfil |
-| DELETE | `/api/users/me/` | Solicitar exclusão |
+| Método | Endpoint | Descrição | OK |
+|---|---|---|---|
+| GET | `/api/users/me/` | Usuário autenticado | ✅ |
+| PATCH | `/api/users/me/` | Editar perfil | ✅ |
+| DELETE | `/api/users/me/` | Solicitar exclusão | ✅ |
 | GET | `/api/users/{username}/` | Perfil público |
-| POST | `/api/users/{id}/follow/` | Seguir usuário |
-| DELETE | `/api/users/{id}/follow/` | Deixar de seguir |
+| POST | `/api/users/{id}/follow/` | Seguir usuário | ✅ |
+| DELETE | `/api/users/{id}/follow/` | Deixar de seguir | ✅ |
 | GET | `/api/users/{id}/followers/` | Listar seguidores |
 | GET | `/api/users/{id}/following/` | Listar seguindo |
 
