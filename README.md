@@ -876,8 +876,8 @@ Campos sugeridos:
 | GET | `/api/users/{username}/` | Perfil público |
 | POST | `/api/users/{id}/follow/` | Seguir usuário | ✅ |
 | DELETE | `/api/users/{id}/follow/` | Deixar de seguir | ✅ |
-| GET | `/api/users/{id}/followers/` | Listar seguidores |
-| GET | `/api/users/{id}/following/` | Listar seguindo |
+| GET | `/api/users/{id}/followers/` | Listar seguidores | ✅ |
+| GET | `/api/users/{id}/following/` | Listar seguindo | ✅ |
 
 ## Filmes
 
