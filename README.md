@@ -908,7 +908,7 @@ Campos sugeridos:
 ## Playlists
 
 | Método | Endpoint | Descrição | OK |
-|---|---|---|
+|---|---|---|---|
 | GET | `/api/playlists/` | Listar playlists do usuário | ✅ |
 | POST | `/api/playlists/` | Criar playlist | ✅ |
 | GET | `/api/playlists/{id}/` | Consultar playlist | ✅ |
