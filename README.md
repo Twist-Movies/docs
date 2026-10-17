@@ -907,17 +907,17 @@ Campos sugeridos:
 
 ## Playlists
 
-| Método | Endpoint | Descrição |
+| Método | Endpoint | Descrição | OK |
 |---|---|---|
-| GET | `/api/playlists/` | Listar playlists do usuário |
-| POST | `/api/playlists/` | Criar playlist |
-| GET | `/api/playlists/{id}/` | Consultar playlist |
-| PATCH | `/api/playlists/{id}/` | Editar playlist |
-| DELETE | `/api/playlists/{id}/` | Excluir playlist |
+| GET | `/api/playlists/` | Listar playlists do usuário | ✅ |
+| POST | `/api/playlists/` | Criar playlist | ✅ |
+| GET | `/api/playlists/{id}/` | Consultar playlist | ✅ |
+| PATCH | `/api/playlists/{id}/` | Editar playlist | ✅ |
+| DELETE | `/api/playlists/{id}/` | Excluir playlist | ✅ |
 | POST | `/api/playlists/{id}/movies/` | Adicionar filme |
 | DELETE | `/api/playlists/{id}/movies/{movie_id}/` | Remover filme |
 
-## Solicitações de filmes
+## Solicitações de filmes (NÃO FAZER!)
 
 | Método | Endpoint | Descrição |
 |---|---|---|
