@@ -881,29 +881,29 @@ Campos sugeridos:
 
 ## Filmes
 
-| Método | Endpoint | Descrição |
-|---|---|---|
-| GET | `/api/movies/search/` | Buscar filmes no TMDB |
-| GET | `/api/movies/{id}/` | Detalhes do filme |
-| POST | `/api/movies/{id}/watch/` | Marcar como assistido |
-| DELETE | `/api/movies/{id}/watch/` | Remover assistido |
-| POST | `/api/movies/{id}/watchlist/` | Adicionar à watchlist |
-| DELETE | `/api/movies/{id}/watchlist/` | Remover da watchlist |
-| PUT/PATCH | `/api/movies/{id}/rating/` | Criar ou alterar avaliação |
-| DELETE | `/api/movies/{id}/rating/` | Remover avaliação |
-| PUT | `/api/movies/{id}/reaction/` | Curtir ou dar deslike |
-| DELETE | `/api/movies/{id}/reaction/` | Remover reação |
-| GET | `/api/movies/{id}/reviews/` | Listar resenhas |
+| Método | Endpoint | Descrição | OK |
+|---|---|---|---|
+| GET | `/api/movies/search/` | Buscar filmes no TMDB | ✅ |
+| GET | `/api/movies/{id}/` | Detalhes do filme | ✅ |
+| POST | `/api/movies/{id}/watch/` | Marcar como assistido | ✅ |
+| DELETE | `/api/movies/{id}/watch/` | Remover assistido | ✅ |
+| POST | `/api/movies/{id}/watchlist/` | Adicionar à watchlist | ✅ |
+| DELETE | `/api/movies/{id}/watchlist/` | Remover da watchlist | ✅ |
+| PUT/PATCH | `/api/movies/{id}/rating/` | Criar ou alterar avaliação | ✅ |
+| DELETE | `/api/movies/{id}/rating/` | Remover avaliação | ✅ |
+| PUT | `/api/movies/{id}/reaction/` | Curtir ou dar deslike | ✅ |
+| DELETE | `/api/movies/{id}/reaction/` | Remover reação | ✅ |
+| GET | `/api/movies/{id}/reviews/` | Listar resenhas | ✅ |
 
 ## Resenhas
 
-| Método | Endpoint | Descrição |
-|---|---|---|
-| POST | `/api/movies/{id}/reviews/` | Criar resenha |
-| PATCH | `/api/reviews/{id}/` | Editar resenha |
-| DELETE | `/api/reviews/{id}/` | Excluir resenha |
-| POST | `/api/reviews/{id}/like/` | Curtir resenha |
-| DELETE | `/api/reviews/{id}/like/` | Remover curtida |
+| Método | Endpoint | Descrição | OK |
+|---|---|---|---|
+| POST | `/api/movies/{id}/reviews/` | Criar resenha | ✅ |
+| PATCH | `/api/reviews/{id}/` | Editar resenha | ✅ |
+| DELETE | `/api/reviews/{id}/` | Excluir resenha | ✅ |
+| POST | `/api/reviews/{id}/like/` | Curtir resenha | ✅ |
+| DELETE | `/api/reviews/{id}/like/` | Remover curtida | ✅ |
 
 ## Playlists
 
@@ -914,8 +914,8 @@ Campos sugeridos:
 | GET | `/api/playlists/{id}/` | Consultar playlist | ✅ |
 | PATCH | `/api/playlists/{id}/` | Editar playlist | ✅ |
 | DELETE | `/api/playlists/{id}/` | Excluir playlist | ✅ |
-| POST | `/api/playlists/{id}/movies/` | Adicionar filme | |
-| DELETE | `/api/playlists/{id}/movies/{movie_id}/` | Remover filme | |
+| POST | `/api/playlists/{id}/movies/` | Adicionar filme | ✅ |
+| DELETE | `/api/playlists/{id}/movies/{movie_id}/` | Remover filme | ✅ |
 
 ## Solicitações de filmes (NÃO FAZER!)
 
