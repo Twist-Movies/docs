@@ -16,12 +16,12 @@ O Twist permitirá que usuários:
 - Adicionem filmes à lista "Quero assistir";
 - Curtam e deem deslike em filmes;
 - Avaliem filmes com estrelas;
-- Publiquem resenhas;
-- Curtam resenhas;
+- Publiquem comentários;
+- Curtam comentários;
 - Criem playlists públicas ou privadas;
 - Sigam outros usuários;
 - Visualizem perfis e estatísticas;
-- Descubram filmes, rankings e resenhas populares.
+- Descubram filmes, rankings e comentários populares.
 
 A aplicação será desenvolvida com frontend em React, backend em Python utilizando Django e Django REST Framework, e banco de dados PostgreSQL.
 
@@ -62,7 +62,9 @@ Após o login, a API deve emitir tokens JWT para acesso às rotas protegidas.
 
 ### RF01.04 — Renovação de token
 
-O sistema deve permitir a renovação do token de acesso por meio de refresh token, quando essa estratégia for utilizada.
+O sistema deve permitir a renovação do token de acesso por meio de refresh token.
+
+Por segurança, o refresh token é entregue ao navegador em um cookie `HttpOnly` (inacessível ao JavaScript), e o access token é mantido apenas em memória no cliente, nunca em `localStorage`. A renovação por cookie exige o cabeçalho `X-Twist-Client: web` como proteção contra CSRF. Clientes que não são navegadores podem enviar o `refresh` no corpo da requisição.
 
 ### RF01.05 — Logout
 
@@ -81,6 +83,8 @@ O fluxo deverá:
 - Permitir uso limitado do token;
 - Não revelar se determinado e-mail está cadastrado;
 - Permitir a definição de uma nova senha.
+
+Implementação: o link de redefinição é enviado por e-mail (provedor transacional, Brevo ou Resend), vale por 1 hora e é de uso único; ao redefinir, todos os refresh tokens do usuário são revogados.
 
 ### RF01.07 — Alteração de senha
 
@@ -117,7 +121,7 @@ Todos os perfis serão públicos e poderão apresentar:
 - Número de perfis seguidos;
 - Quantidade de filmes assistidos;
 - Quantidade de avaliações;
-- Quantidade de resenhas;
+- Quantidade de comentários;
 - Playlists públicas;
 - Filmes curtidos;
 - Histórico público de atividades, conforme definição do produto.
@@ -142,7 +146,7 @@ O sistema deve permitir visualizar:
 O sistema deve apresentar, no mínimo:
 
 - Total de filmes assistidos;
-- Total de resenhas publicadas;
+- Total de comentários publicados;
 - Total de avaliações;
 - Total de seguidores;
 - Total de perfis seguidos.
@@ -186,7 +190,7 @@ O sistema deve apresentar:
 - Nota média;
 - Quantidade de avaliações;
 - Informações de lançamento;
-- Resenhas dos usuários do Twist.
+- Comentários dos usuários do Twist.
 
 ### RF03.04 — Filme não encontrado
 
@@ -366,14 +370,19 @@ A página do filme poderá apresentar:
 
 ### RF07.01 — Avaliar filme
 
-O usuário deve poder avaliar um filme com uma escala de 1 a 5 estrelas, utilizando números inteiros.
+O usuário deve poder avaliar um filme com uma escala de 0,5 a 5 estrelas, em passos de meia estrela.
 
 Valores permitidos:
 
+- 0,5 estrela;
 - 1 estrela;
+- 1,5 estrela;
 - 2 estrelas;
+- 2,5 estrelas;
 - 3 estrelas;
+- 3,5 estrelas;
 - 4 estrelas;
+- 4,5 estrelas;
 - 5 estrelas.
 
 ### RF07.02 — Alterar avaliação
@@ -398,13 +407,15 @@ Cada usuário poderá possuir uma avaliação ativa por filme.
 
 ---
 
-## RF08 — Resenhas
+## RF08 — Comentários
 
-### RF08.01 — Criar resenha
+> Na interface o termo é “Comentário”; na API e no código a entidade continua sendo `Review` (`/api/reviews/`).
 
-O usuário poderá publicar uma resenha vinculada a um filme.
+### RF08.01 — Criar comentário
 
-A resenha deverá conter:
+O usuário poderá publicar um comentário vinculado a um filme.
+
+O comentário deverá conter:
 
 - Texto;
 - Autor;
@@ -413,51 +424,51 @@ A resenha deverá conter:
 - Data de atualização;
 - Indicador de spoiler, caso seja implementado.
 
-### RF08.02 — Uma resenha ativa por filme
+### RF08.02 — Um comentário ativo por filme
 
-A regra inicial será permitir uma resenha ativa por usuário para cada filme.
+A regra inicial será permitir um comentário ativo por usuário para cada filme.
 
-### RF08.03 — Editar resenha
+### RF08.03 — Editar comentário
 
-O autor poderá editar sua própria resenha.
+O autor poderá editar seu próprio comentário.
 
-### RF08.04 — Excluir resenha
+### RF08.04 — Excluir comentário
 
-O autor poderá excluir sua própria resenha.
+O autor poderá excluir seu próprio comentário.
 
-### RF08.05 — Curtir resenha
+### RF08.05 — Curtir comentário
 
-Os usuários poderão curtir resenhas.
+Os usuários poderão curtir comentários.
 
-Cada usuário poderá curtir uma determinada resenha apenas uma vez.
+Cada usuário poderá curtir um determinado comentário apenas uma vez.
 
-### RF08.06 — Resenhas populares da semana
+### RF08.06 — Comentários populares da semana
 
-O sistema deve apresentar as resenhas mais populares da semana com base na quantidade de curtidas recebidas no período.
+O sistema deve apresentar os comentários mais populares da semana com base na quantidade de curtidas recebidas no período.
 
 A equipe deverá definir:
 
 - Data inicial e final do período;
 - Fuso horário;
 - Como tratar empates;
-- Se resenhas antigas podem aparecer quando recebem novas curtidas;
+- Se comentários antigos podem aparecer quando recebem novas curtidas;
 - Se o ranking será calculado em tempo real ou por tarefa agendada.
 
-### RF08.07 — Comentários em resenhas
+### RF08.07 — Respostas aos comentários
 
-A versão inicial não terá comentários ou respostas em resenhas.
+A versão inicial não terá respostas aos comentários.
 
 A interação social será feita por meio de curtidas.
 
 ### RF08.08 — Dados exibidos
 
-Cada item da lista de resenhas populares deverá exibir:
+Cada item da lista de comentários populares deverá exibir:
 
 - Filme;
 - Capa ou pôster;
 - Nome do usuário;
 - Foto do usuário;
-- Texto da resenha;
+- Texto do comentário;
 - Data de publicação;
 - Número de curtidas;
 - Link para o filme;
@@ -544,9 +555,9 @@ O sistema deverá apresentar filmes com melhores médias de avaliação.
 
 O ranking deverá considerar uma quantidade mínima de avaliações para evitar distorções.
 
-### RF10.06 — Resenhas populares
+### RF10.06 — Comentários populares
 
-A Home deverá apresentar as resenhas mais curtidas da semana.
+A Home deverá apresentar os comentários mais curtidos da semana.
 
 ### RF10.07 — Navegação
 
@@ -555,7 +566,7 @@ O usuário deverá conseguir acessar:
 - Página do filme;
 - Perfil do autor;
 - Playlist pública;
-- Lista completa de resenhas;
+- Lista completa de comentários;
 - Resultados completos dos rankings.
 
 ---
@@ -629,7 +640,7 @@ O projeto deverá conter testes automatizados para as funcionalidades principais
 - Curtidas;
 - Deslikes;
 - Avaliações;
-- Resenhas;
+- Comentários;
 - Playlists;
 - Solicitações de filmes.
 
@@ -674,7 +685,7 @@ A interface deverá utilizar textos legíveis, contraste adequado, labels em for
 - Cada filme deverá possuir um identificador interno.
 - Filmes originados do TMDB deverão armazenar o identificador externo.
 - O sistema não deverá criar filmes duplicados para o mesmo identificador externo e provedor.
-- Filmes precisam existir no catálogo antes de serem associados a avaliações, resenhas, curtidas ou playlists.
+- Filmes precisam existir no catálogo antes de serem associados a avaliações, comentários, curtidas ou playlists.
 
 ## RN03 — Assistidos
 
@@ -691,16 +702,16 @@ A interface deverá utilizar textos legíveis, contraste adequado, labels em for
 
 ## RN05 — Avaliações
 
-- A escala será de 1 a 5 estrelas com números inteiros.
+- A escala será de 0,5 a 5 estrelas, em passos de 0,5.
 - Cada usuário poderá ter uma avaliação ativa por filme.
 - A avaliação poderá ou não exigir que o filme esteja marcado como assistido; essa decisão está pendente.
 - A média deverá considerar apenas avaliações válidas.
 
-## RN06 — Resenhas
+## RN06 — Comentários
 
-- Cada usuário poderá possuir uma resenha ativa por filme.
-- Apenas o autor poderá editar ou excluir a própria resenha.
-- Cada usuário poderá curtir uma resenha uma única vez.
+- Cada usuário poderá possuir um comentário ativo por filme.
+- Apenas o autor poderá editar ou excluir o próprio comentário.
+- Cada usuário poderá curtir um comentário uma única vez.
 - A versão inicial não terá comentários ou respostas.
 - O ranking semanal será baseado em curtidas recebidas no período.
 
@@ -729,16 +740,16 @@ As decisões abaixo são obrigatórias para a primeira versão do Twist e devem 
 
 | Item | Decisão implementada |
 |---|---|
-| Escala de estrelas | Avaliações de 1 a 5 estrelas, utilizando somente números inteiros. |
+| Escala de estrelas | Avaliações de 0,5 a 5 estrelas, em passos de meia estrela (0,5; 1; 1,5; ...). |
 | Avaliação exige filme assistido? | Ainda não definido. A regra deverá ser configurável/decidida antes da implementação final da validação de avaliações. |
 | Registro de assistidos | Um único registro por usuário e filme. |
 | Curtida e deslike em filmes | Implementar as duas reações. O usuário não poderá manter curtida e deslike simultaneamente para o mesmo filme. |
-| Resenhas por filme | Uma única resenha ativa por usuário e filme. |
+| Comentários por filme | Um único comentário ativo por usuário e filme. |
 | Perfil | Todos os perfis serão públicos. |
 | Exclusão de conta | Exclusão integral quando tecnicamente possível, respeitando integridade referencial e obrigações legais. |
 | Catálogo | Utilizar API externa, com o TMDB como fonte principal e identificador externo armazenado localmente. |
-| Ranking semanal | Ranking de resenhas baseado nas curtidas recebidas durante o período semanal. |
-| Comentários em resenhas | Não haverá comentários ou respostas na primeira versão; haverá somente curtidas. |
+| Ranking semanal | Ranking de comentários baseado nas curtidas recebidas durante o período semanal. |
+| Respostas aos comentários | Não haverá respostas a comentários na primeira versão; haverá somente curtidas. |
 | Chave primária | Inteiro autoincremento (`BigAutoField`) em todas as entidades, em vez de UUID. |
 | Login | Autenticação com JWT (`djangorestframework-simplejwt`), aceitando e-mail ou nome de usuário. |
 | Logout | Revogação (blacklist) do refresh token via `rest_framework_simplejwt.token_blacklist`; access token expira naturalmente. |
@@ -863,8 +874,8 @@ Campos sugeridos:
 | POST | `/api/accounts/login/` | Login | ✅ |
 | POST | `/api/accounts/token/refresh/` | Renovação do token | ✅ |
 | POST | `/api/accounts/logout/` | Logout | ✅ |
-| POST | `/api/accounts/password-reset/` | Solicitar recuperação |  |
-| POST | `/api/accounts/password-reset/confirm/` | Confirmar recuperação |  |
+| POST | `/api/accounts/password-reset/` | Solicitar recuperação | ✅ |
+| POST | `/api/accounts/password-reset/confirm/` | Confirmar recuperação | ✅ |
 
 ## Usuários
 
@@ -878,13 +889,20 @@ Campos sugeridos:
 | DELETE | `/api/users/{id}/follow/` | Deixar de seguir | ✅ |
 | GET | `/api/users/{id}/followers/` | Listar seguidores | ✅ |
 | GET | `/api/users/{id}/following/` | Listar seguindo | ✅ |
+| GET | `/api/users/search/?q=` | Buscar usuários | ✅ |
+| GET | `/api/users/{id}/reviews/` | Comentários de um usuário | ✅ |
+| GET | `/api/feed/` | Comentários de quem o usuário segue | ✅ |
 
 ## Filmes
 
 | Método | Endpoint | Descrição | OK |
 |---|---|---|---|
 | GET | `/api/movies/search/` | Buscar filmes no TMDB | ✅ |
-| GET | `/api/movies/{id}/` | Detalhes do filme | ✅ |
+| GET | `/api/movies/discover/` | Descobrir filmes (popularidade, lançamentos, nota, gênero...) | ✅ |
+| GET | `/api/movies/trending/` | Filmes em alta na semana | ✅ |
+| GET | `/api/movies/{id}/` | Detalhes do filme (trailer, aprovação, elenco e equipe) | ✅ |
+| GET | `/api/movies/{id}/recommendations/` | Filmes semelhantes | ✅ |
+| GET | `/api/people/{id}/` | Pessoa (ator, diretor...) e filmografia | ✅ |
 | POST | `/api/movies/{id}/watch/` | Marcar como assistido | ✅ |
 | DELETE | `/api/movies/{id}/watch/` | Remover assistido | ✅ |
 | POST | `/api/movies/{id}/watchlist/` | Adicionar à watchlist | ✅ |
@@ -893,16 +911,16 @@ Campos sugeridos:
 | DELETE | `/api/movies/{id}/rating/` | Remover avaliação | ✅ |
 | PUT | `/api/movies/{id}/reaction/` | Curtir ou dar deslike | ✅ |
 | DELETE | `/api/movies/{id}/reaction/` | Remover reação | ✅ |
-| GET | `/api/movies/{id}/reviews/` | Listar resenhas | ✅ |
+| GET | `/api/movies/{id}/reviews/` | Listar comentários | ✅ |
 
-## Resenhas
+## Comentários
 
 | Método | Endpoint | Descrição | OK |
 |---|---|---|---|
-| POST | `/api/movies/{id}/reviews/` | Criar resenha | ✅ |
-| PATCH | `/api/reviews/{id}/` | Editar resenha | ✅ |
-| DELETE | `/api/reviews/{id}/` | Excluir resenha | ✅ |
-| POST | `/api/reviews/{id}/like/` | Curtir resenha | ✅ |
+| POST | `/api/movies/{id}/reviews/` | Criar comentário | ✅ |
+| PATCH | `/api/reviews/{id}/` | Editar comentário | ✅ |
+| DELETE | `/api/reviews/{id}/` | Excluir comentário | ✅ |
+| POST | `/api/reviews/{id}/like/` | Curtir comentário | ✅ |
 | DELETE | `/api/reviews/{id}/like/` | Remover curtida | ✅ |
 
 ## Playlists
@@ -910,6 +928,7 @@ Campos sugeridos:
 | Método | Endpoint | Descrição | OK |
 |---|---|---|---|
 | GET | `/api/playlists/` | Listar playlists do usuário | ✅ |
+| GET | `/api/playlists/official/` | Listas oficiais da equipe Twist | ✅ |
 | POST | `/api/playlists/` | Criar playlist | ✅ |
 | GET | `/api/playlists/{id}/` | Consultar playlist | ✅ |
 | PATCH | `/api/playlists/{id}/` | Editar playlist | ✅ |
@@ -936,7 +955,10 @@ Campos sugeridos:
 - Não expor a chave do TMDB no frontend.
 - Armazenar segredos em variáveis de ambiente.
 - Validar permissões em todas as operações de edição e exclusão.
-- Aplicar throttling ou limites de requisição em endpoints sensíveis.
+- Aplicar throttling ou limites de requisição em endpoints sensíveis (login, cadastro, recuperação de senha e rotas que consultam o TMDB).
+- Guardar o refresh token apenas em cookie `HttpOnly` e o access token apenas em memória.
+- Tratar e-mail e nome de usuário sem diferenciar maiúsculas e minúsculas e reservar nomes como `twist` e `admin`.
+- Exigir a senha atual para trocar o e-mail e para excluir a conta.
 - Evitar exposição de informações pessoais desnecessárias.
 - Proteger endpoints administrativos com permissões específicas.
 - Validar uploads de imagens quanto a formato e tamanho.
