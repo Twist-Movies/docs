@@ -62,7 +62,9 @@ Após o login, a API deve emitir tokens JWT para acesso às rotas protegidas.
 
 ### RF01.04 — Renovação de token
 
-O sistema deve permitir a renovação do token de acesso por meio de refresh token, quando essa estratégia for utilizada.
+O sistema deve permitir a renovação do token de acesso por meio de refresh token.
+
+Por segurança, o refresh token é entregue ao navegador em um cookie `HttpOnly` (inacessível ao JavaScript), e o access token é mantido apenas em memória no cliente, nunca em `localStorage`. A renovação por cookie exige o cabeçalho `X-Twist-Client: web` como proteção contra CSRF. Clientes que não são navegadores podem enviar o `refresh` no corpo da requisição.
 
 ### RF01.05 — Logout
 
@@ -81,6 +83,8 @@ O fluxo deverá:
 - Permitir uso limitado do token;
 - Não revelar se determinado e-mail está cadastrado;
 - Permitir a definição de uma nova senha.
+
+Implementação: o link de redefinição é enviado por e-mail (provedor transacional, Brevo ou Resend), vale por 1 hora e é de uso único; ao redefinir, todos os refresh tokens do usuário são revogados.
 
 ### RF01.07 — Alteração de senha
 
@@ -370,19 +374,19 @@ O usuário deve poder avaliar um filme com uma escala de 0,5 a 5 estrelas, em pa
 
 Valores permitidos:
 
-- 1 estrela;
-- 2 estrelas;
-- 3 estrelas;
-- 4 estrelas;
 - 0,5 estrela;
-- 5 estrelas.
+- 1 estrela;
 - 1,5 estrela;
-
+- 2 estrelas;
 - 2,5 estrelas;
-### RF07.02 — Alterar avaliação
+- 3 estrelas;
 - 3,5 estrelas;
-
+- 4 estrelas;
 - 4,5 estrelas;
+- 5 estrelas.
+
+### RF07.02 — Alterar avaliação
+
 O usuário poderá alterar sua avaliação.
 
 ### RF07.03 — Excluir avaliação
@@ -870,8 +874,8 @@ Campos sugeridos:
 | POST | `/api/accounts/login/` | Login | ✅ |
 | POST | `/api/accounts/token/refresh/` | Renovação do token | ✅ |
 | POST | `/api/accounts/logout/` | Logout | ✅ |
-| POST | `/api/accounts/password-reset/` | Solicitar recuperação |  |
-| POST | `/api/accounts/password-reset/confirm/` | Confirmar recuperação |  |
+| POST | `/api/accounts/password-reset/` | Solicitar recuperação | ✅ |
+| POST | `/api/accounts/password-reset/confirm/` | Confirmar recuperação | ✅ |
 
 ## Usuários
 
@@ -885,13 +889,20 @@ Campos sugeridos:
 | DELETE | `/api/users/{id}/follow/` | Deixar de seguir | ✅ |
 | GET | `/api/users/{id}/followers/` | Listar seguidores | ✅ |
 | GET | `/api/users/{id}/following/` | Listar seguindo | ✅ |
+| GET | `/api/users/search/?q=` | Buscar usuários | ✅ |
+| GET | `/api/users/{id}/reviews/` | Comentários de um usuário | ✅ |
+| GET | `/api/feed/` | Comentários de quem o usuário segue | ✅ |
 
 ## Filmes
 
 | Método | Endpoint | Descrição | OK |
 |---|---|---|---|
 | GET | `/api/movies/search/` | Buscar filmes no TMDB | ✅ |
-| GET | `/api/movies/{id}/` | Detalhes do filme | ✅ |
+| GET | `/api/movies/discover/` | Descobrir filmes (popularidade, lançamentos, nota, gênero...) | ✅ |
+| GET | `/api/movies/trending/` | Filmes em alta na semana | ✅ |
+| GET | `/api/movies/{id}/` | Detalhes do filme (trailer, aprovação, elenco e equipe) | ✅ |
+| GET | `/api/movies/{id}/recommendations/` | Filmes semelhantes | ✅ |
+| GET | `/api/people/{id}/` | Pessoa (ator, diretor...) e filmografia | ✅ |
 | POST | `/api/movies/{id}/watch/` | Marcar como assistido | ✅ |
 | DELETE | `/api/movies/{id}/watch/` | Remover assistido | ✅ |
 | POST | `/api/movies/{id}/watchlist/` | Adicionar à watchlist | ✅ |
@@ -900,16 +911,16 @@ Campos sugeridos:
 | DELETE | `/api/movies/{id}/rating/` | Remover avaliação | ✅ |
 | PUT | `/api/movies/{id}/reaction/` | Curtir ou dar deslike | ✅ |
 | DELETE | `/api/movies/{id}/reaction/` | Remover reação | ✅ |
-| GET | `/api/movies/{id}/reviews/` | Listar resenhas | ✅ |
+| GET | `/api/movies/{id}/reviews/` | Listar comentários | ✅ |
 
-## Resenhas
+## Comentários
 
 | Método | Endpoint | Descrição | OK |
 |---|---|---|---|
-| POST | `/api/movies/{id}/reviews/` | Criar resenha | ✅ |
-| PATCH | `/api/reviews/{id}/` | Editar resenha | ✅ |
-| DELETE | `/api/reviews/{id}/` | Excluir resenha | ✅ |
-| POST | `/api/reviews/{id}/like/` | Curtir resenha | ✅ |
+| POST | `/api/movies/{id}/reviews/` | Criar comentário | ✅ |
+| PATCH | `/api/reviews/{id}/` | Editar comentário | ✅ |
+| DELETE | `/api/reviews/{id}/` | Excluir comentário | ✅ |
+| POST | `/api/reviews/{id}/like/` | Curtir comentário | ✅ |
 | DELETE | `/api/reviews/{id}/like/` | Remover curtida | ✅ |
 
 ## Playlists
@@ -917,6 +928,7 @@ Campos sugeridos:
 | Método | Endpoint | Descrição | OK |
 |---|---|---|---|
 | GET | `/api/playlists/` | Listar playlists do usuário | ✅ |
+| GET | `/api/playlists/official/` | Listas oficiais da equipe Twist | ✅ |
 | POST | `/api/playlists/` | Criar playlist | ✅ |
 | GET | `/api/playlists/{id}/` | Consultar playlist | ✅ |
 | PATCH | `/api/playlists/{id}/` | Editar playlist | ✅ |
@@ -943,7 +955,10 @@ Campos sugeridos:
 - Não expor a chave do TMDB no frontend.
 - Armazenar segredos em variáveis de ambiente.
 - Validar permissões em todas as operações de edição e exclusão.
-- Aplicar throttling ou limites de requisição em endpoints sensíveis.
+- Aplicar throttling ou limites de requisição em endpoints sensíveis (login, cadastro, recuperação de senha e rotas que consultam o TMDB).
+- Guardar o refresh token apenas em cookie `HttpOnly` e o access token apenas em memória.
+- Tratar e-mail e nome de usuário sem diferenciar maiúsculas e minúsculas e reservar nomes como `twist` e `admin`.
+- Exigir a senha atual para trocar o e-mail e para excluir a conta.
 - Evitar exposição de informações pessoais desnecessárias.
 - Proteger endpoints administrativos com permissões específicas.
 - Validar uploads de imagens quanto a formato e tamanho.
