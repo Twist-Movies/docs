@@ -16,12 +16,12 @@ O Twist permitirá que usuários:
 - Adicionem filmes à lista "Quero assistir";
 - Curtam e deem deslike em filmes;
 - Avaliem filmes com estrelas;
-- Publiquem resenhas;
-- Curtam resenhas;
+- Publiquem comentários;
+- Curtam comentários;
 - Criem playlists públicas ou privadas;
 - Sigam outros usuários;
 - Visualizem perfis e estatísticas;
-- Descubram filmes, rankings e resenhas populares.
+- Descubram filmes, rankings e comentários populares.
 
 A aplicação será desenvolvida com frontend em React, backend em Python utilizando Django e Django REST Framework, e banco de dados PostgreSQL.
 
@@ -117,7 +117,7 @@ Todos os perfis serão públicos e poderão apresentar:
 - Número de perfis seguidos;
 - Quantidade de filmes assistidos;
 - Quantidade de avaliações;
-- Quantidade de resenhas;
+- Quantidade de comentários;
 - Playlists públicas;
 - Filmes curtidos;
 - Histórico público de atividades, conforme definição do produto.
@@ -142,7 +142,7 @@ O sistema deve permitir visualizar:
 O sistema deve apresentar, no mínimo:
 
 - Total de filmes assistidos;
-- Total de resenhas publicadas;
+- Total de comentários publicados;
 - Total de avaliações;
 - Total de seguidores;
 - Total de perfis seguidos.
@@ -186,7 +186,7 @@ O sistema deve apresentar:
 - Nota média;
 - Quantidade de avaliações;
 - Informações de lançamento;
-- Resenhas dos usuários do Twist.
+- Comentários dos usuários do Twist.
 
 ### RF03.04 — Filme não encontrado
 
@@ -366,7 +366,7 @@ A página do filme poderá apresentar:
 
 ### RF07.01 — Avaliar filme
 
-O usuário deve poder avaliar um filme com uma escala de 1 a 5 estrelas, utilizando números inteiros.
+O usuário deve poder avaliar um filme com uma escala de 0,5 a 5 estrelas, em passos de meia estrela.
 
 Valores permitidos:
 
@@ -374,10 +374,15 @@ Valores permitidos:
 - 2 estrelas;
 - 3 estrelas;
 - 4 estrelas;
+- 0,5 estrela;
 - 5 estrelas.
+- 1,5 estrela;
 
+- 2,5 estrelas;
 ### RF07.02 — Alterar avaliação
+- 3,5 estrelas;
 
+- 4,5 estrelas;
 O usuário poderá alterar sua avaliação.
 
 ### RF07.03 — Excluir avaliação
@@ -398,13 +403,15 @@ Cada usuário poderá possuir uma avaliação ativa por filme.
 
 ---
 
-## RF08 — Resenhas
+## RF08 — Comentários
 
-### RF08.01 — Criar resenha
+> Na interface o termo é “Comentário”; na API e no código a entidade continua sendo `Review` (`/api/reviews/`).
 
-O usuário poderá publicar uma resenha vinculada a um filme.
+### RF08.01 — Criar comentário
 
-A resenha deverá conter:
+O usuário poderá publicar um comentário vinculado a um filme.
+
+O comentário deverá conter:
 
 - Texto;
 - Autor;
@@ -413,51 +420,51 @@ A resenha deverá conter:
 - Data de atualização;
 - Indicador de spoiler, caso seja implementado.
 
-### RF08.02 — Uma resenha ativa por filme
+### RF08.02 — Um comentário ativo por filme
 
-A regra inicial será permitir uma resenha ativa por usuário para cada filme.
+A regra inicial será permitir um comentário ativo por usuário para cada filme.
 
-### RF08.03 — Editar resenha
+### RF08.03 — Editar comentário
 
-O autor poderá editar sua própria resenha.
+O autor poderá editar seu próprio comentário.
 
-### RF08.04 — Excluir resenha
+### RF08.04 — Excluir comentário
 
-O autor poderá excluir sua própria resenha.
+O autor poderá excluir seu próprio comentário.
 
-### RF08.05 — Curtir resenha
+### RF08.05 — Curtir comentário
 
-Os usuários poderão curtir resenhas.
+Os usuários poderão curtir comentários.
 
-Cada usuário poderá curtir uma determinada resenha apenas uma vez.
+Cada usuário poderá curtir um determinado comentário apenas uma vez.
 
-### RF08.06 — Resenhas populares da semana
+### RF08.06 — Comentários populares da semana
 
-O sistema deve apresentar as resenhas mais populares da semana com base na quantidade de curtidas recebidas no período.
+O sistema deve apresentar os comentários mais populares da semana com base na quantidade de curtidas recebidas no período.
 
 A equipe deverá definir:
 
 - Data inicial e final do período;
 - Fuso horário;
 - Como tratar empates;
-- Se resenhas antigas podem aparecer quando recebem novas curtidas;
+- Se comentários antigos podem aparecer quando recebem novas curtidas;
 - Se o ranking será calculado em tempo real ou por tarefa agendada.
 
-### RF08.07 — Comentários em resenhas
+### RF08.07 — Respostas aos comentários
 
-A versão inicial não terá comentários ou respostas em resenhas.
+A versão inicial não terá respostas aos comentários.
 
 A interação social será feita por meio de curtidas.
 
 ### RF08.08 — Dados exibidos
 
-Cada item da lista de resenhas populares deverá exibir:
+Cada item da lista de comentários populares deverá exibir:
 
 - Filme;
 - Capa ou pôster;
 - Nome do usuário;
 - Foto do usuário;
-- Texto da resenha;
+- Texto do comentário;
 - Data de publicação;
 - Número de curtidas;
 - Link para o filme;
@@ -544,9 +551,9 @@ O sistema deverá apresentar filmes com melhores médias de avaliação.
 
 O ranking deverá considerar uma quantidade mínima de avaliações para evitar distorções.
 
-### RF10.06 — Resenhas populares
+### RF10.06 — Comentários populares
 
-A Home deverá apresentar as resenhas mais curtidas da semana.
+A Home deverá apresentar os comentários mais curtidos da semana.
 
 ### RF10.07 — Navegação
 
@@ -555,7 +562,7 @@ O usuário deverá conseguir acessar:
 - Página do filme;
 - Perfil do autor;
 - Playlist pública;
-- Lista completa de resenhas;
+- Lista completa de comentários;
 - Resultados completos dos rankings.
 
 ---
@@ -629,7 +636,7 @@ O projeto deverá conter testes automatizados para as funcionalidades principais
 - Curtidas;
 - Deslikes;
 - Avaliações;
-- Resenhas;
+- Comentários;
 - Playlists;
 - Solicitações de filmes.
 
@@ -674,7 +681,7 @@ A interface deverá utilizar textos legíveis, contraste adequado, labels em for
 - Cada filme deverá possuir um identificador interno.
 - Filmes originados do TMDB deverão armazenar o identificador externo.
 - O sistema não deverá criar filmes duplicados para o mesmo identificador externo e provedor.
-- Filmes precisam existir no catálogo antes de serem associados a avaliações, resenhas, curtidas ou playlists.
+- Filmes precisam existir no catálogo antes de serem associados a avaliações, comentários, curtidas ou playlists.
 
 ## RN03 — Assistidos
 
@@ -691,16 +698,16 @@ A interface deverá utilizar textos legíveis, contraste adequado, labels em for
 
 ## RN05 — Avaliações
 
-- A escala será de 1 a 5 estrelas com números inteiros.
+- A escala será de 0,5 a 5 estrelas, em passos de 0,5.
 - Cada usuário poderá ter uma avaliação ativa por filme.
 - A avaliação poderá ou não exigir que o filme esteja marcado como assistido; essa decisão está pendente.
 - A média deverá considerar apenas avaliações válidas.
 
-## RN06 — Resenhas
+## RN06 — Comentários
 
-- Cada usuário poderá possuir uma resenha ativa por filme.
-- Apenas o autor poderá editar ou excluir a própria resenha.
-- Cada usuário poderá curtir uma resenha uma única vez.
+- Cada usuário poderá possuir um comentário ativo por filme.
+- Apenas o autor poderá editar ou excluir o próprio comentário.
+- Cada usuário poderá curtir um comentário uma única vez.
 - A versão inicial não terá comentários ou respostas.
 - O ranking semanal será baseado em curtidas recebidas no período.
 
@@ -729,16 +736,16 @@ As decisões abaixo são obrigatórias para a primeira versão do Twist e devem 
 
 | Item | Decisão implementada |
 |---|---|
-| Escala de estrelas | Avaliações de 1 a 5 estrelas, utilizando somente números inteiros. |
+| Escala de estrelas | Avaliações de 0,5 a 5 estrelas, em passos de meia estrela (0,5; 1; 1,5; ...). |
 | Avaliação exige filme assistido? | Ainda não definido. A regra deverá ser configurável/decidida antes da implementação final da validação de avaliações. |
 | Registro de assistidos | Um único registro por usuário e filme. |
 | Curtida e deslike em filmes | Implementar as duas reações. O usuário não poderá manter curtida e deslike simultaneamente para o mesmo filme. |
-| Resenhas por filme | Uma única resenha ativa por usuário e filme. |
+| Comentários por filme | Um único comentário ativo por usuário e filme. |
 | Perfil | Todos os perfis serão públicos. |
 | Exclusão de conta | Exclusão integral quando tecnicamente possível, respeitando integridade referencial e obrigações legais. |
 | Catálogo | Utilizar API externa, com o TMDB como fonte principal e identificador externo armazenado localmente. |
-| Ranking semanal | Ranking de resenhas baseado nas curtidas recebidas durante o período semanal. |
-| Comentários em resenhas | Não haverá comentários ou respostas na primeira versão; haverá somente curtidas. |
+| Ranking semanal | Ranking de comentários baseado nas curtidas recebidas durante o período semanal. |
+| Respostas aos comentários | Não haverá respostas a comentários na primeira versão; haverá somente curtidas. |
 | Chave primária | Inteiro autoincremento (`BigAutoField`) em todas as entidades, em vez de UUID. |
 | Login | Autenticação com JWT (`djangorestframework-simplejwt`), aceitando e-mail ou nome de usuário. |
 | Logout | Revogação (blacklist) do refresh token via `rest_framework_simplejwt.token_blacklist`; access token expira naturalmente. |
